@@ -15,8 +15,7 @@ class DecoderTinyTransducer(nn.Module):
         super().__init__()
         self.kernel_size = kernel_size
         self.embedding = nn.Embedding(num_classes, hidden_state_dim)
-        self.conv = Conv1d(in_channels=hidden_state_dim, out_channels=hidden_state_dim, kernel_size=kernel_size)
-        self.out_proj = nn.Linear(hidden_state_dim, output_dim)
+        self.conv = Conv1d(in_channels=hidden_state_dim, out_channels=output_dim, kernel_size=kernel_size)
 
     def forward(self, x):
         out = self.embedding(x)
@@ -24,7 +23,6 @@ class DecoderTinyTransducer(nn.Module):
         out = F.pad(out, (self.kernel_size - 1, 0))
         out = self.conv(out)
         out = out.transpose(1, 2)
-        out = self.out_proj(out)
         return out
 
 
